@@ -10,23 +10,25 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+#Copy requirement files
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
 ARG DEV=false
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    --mount=type=bind,source=requirements.dev.txt,target=requirements.dev.txt \
-    python -m venv /py && \
+RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --update --no-cache postgresql-client && \
     apk add --update --no-cache --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev && \
-    /py/bin/pip install -r requirements.txt && \
+    /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
-        then /py/bin/pip install -r requirements.dev.txt ; \
+        then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
+    rm -rf /tmp && \
     apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
