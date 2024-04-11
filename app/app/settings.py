@@ -146,5 +146,5 @@ SIMPLE_JWT = {
     'SIGNING_KEY': 'changeme',
     'ALGORITHM': 'HS256',
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
