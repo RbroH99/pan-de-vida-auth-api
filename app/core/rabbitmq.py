@@ -7,6 +7,7 @@ import aio_pika
 
 from app.settings import RABBITMQ_URL
 
+
 async def get_rabbitmq_connection():
     connection = await aio_pika.connect_robust(
         RABBITMQ_URL
@@ -29,5 +30,3 @@ async def send_user_notification(queue, user_info):
     )
     print(f"AUTH API Sent {json.loads(user_info)['email']}")
     await connection.close()
-
-

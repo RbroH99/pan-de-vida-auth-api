@@ -5,12 +5,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .rabbitmq import send_user_notification
-
-import json
-
-import asyncio
-
 from core import models
 
 
